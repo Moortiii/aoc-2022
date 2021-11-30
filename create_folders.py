@@ -1,7 +1,7 @@
 import os
 import shutil
 
-folder_names = [f"day_{day}" for day in range(1, 25)]
+folder_names = [f"day_{day:02d}" for day in range(1, 25)]
 
 def create_folders():
     """ Create basic folder structure with placeholder files
@@ -22,5 +22,5 @@ def remove_folders():
     for folder in folder_names:
         shutil.rmtree(folder, ignore_errors=True)
 
-# remove_folders()
+#remove_folders()
 create_folders()
