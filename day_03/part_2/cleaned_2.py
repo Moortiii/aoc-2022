@@ -1,54 +1,50 @@
-from collections import defaultdict
-
 FILENAME = "input.txt"
 
 with open(FILENAME, "r") as f:
     data = f.readlines()
     data = [line.strip() for line in data]
 
-def get_most_and_least_common(entries):
-    transposed_data = [
-        "".join(row[i] for row in entries)
-        for i in range(len(entries[0]))
+
+def get_most_and_least_common(rows):
+    transposed = [
+        "".join(row[i] for row in rows)
+        for i in range(len(rows[0]))
     ]
 
-    most_common = defaultdict(int)
-    least_common = defaultdict(int)
+    most_common = []
 
-    for index, entry in enumerate(transposed_data):
-        x_count = entry.count("1")
-        y_count = entry.count("0")
+    for row in transposed:
+        set_bits_count   = row.count("1")
+        unset_bits_count = row.count("0")
 
-        if x_count >= y_count:
-            most_common[index] = 1
-            least_common[index] = 0
+        if set_bits_count >= unset_bits_count:
+            most_common.append(1)
         else:
-            most_common[index] = 0
-            least_common[index] = 1
+            most_common.append(0)
 
     return {
         "most_common": most_common,
-        "least_common": least_common
+        "least_common": [v ^ 1 for v in most_common]
     }
 
 
-def remove_unmatching(entries, identifier):
-    entries_kept = entries.copy()
-    matcher = get_most_and_least_common(entries_kept)[identifier]
+def remove_unmatching(entries, target):
+    rows = entries.copy()
+    column_count = len(entries[0])
 
-    for i in range(len(data[0])):
-        matcher = get_most_and_least_common(entries_kept)[identifier]
+    for column in range(column_count):
+        value_to_match = get_most_and_least_common(rows)[target]
         
-        for entry in entries_kept[:]:
-            if len(entries_kept) == 1:
+        for row in rows[:]:
+            if len(rows) == 1:
                 break
 
-            digit = int(entry[i])
+            digit = int(row[column])
             
-            if digit != matcher[i]:
-                entries_kept.remove(entry)
+            if digit != value_to_match[column]:
+                rows.remove(row)
 
-    return entries_kept[0]
+    return rows[0]
 
 oxygen_rating = int(remove_unmatching(data, "most_common"), 2)
 carbon_rating = int(remove_unmatching(data, "least_common"), 2)
