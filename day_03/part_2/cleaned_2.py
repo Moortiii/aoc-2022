@@ -8,7 +8,7 @@ with open(FILENAME, "r") as f:
 
 def get_most_and_least_common(entries):
     transposed_data = [
-        ["".join(row[i] for row in entries)]
+        "".join(row[i] for row in entries)
         for i in range(len(entries[0]))
     ]
 
@@ -16,8 +16,6 @@ def get_most_and_least_common(entries):
     least_common = defaultdict(int)
 
     for index, entry in enumerate(transposed_data):
-        entry = entry[0]
-
         x_count = entry.count("1")
         y_count = entry.count("0")
 
