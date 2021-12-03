@@ -32,41 +32,32 @@ def get_most_and_least_common(entries):
             most_common[int(key)] = 0
             least_common[int(key)] = 1
 
-    return most_common, least_common
+    return {
+        "most_common": most_common,
+        "least_common": least_common
+    }
 
-entries_kept = data.copy()
-most_common, least_common = get_most_and_least_common(entries_kept)
 
-for i in range(len(data[0])):
-    most_common, least_common = get_most_and_least_common(entries_kept)
-    
-    for entry in entries_kept[:]:
-        if len(entries_kept) == 1:
-            break
+def remove_unmatching(entries, identifier):
+    entries_kept = entries.copy()
+    matcher = get_most_and_least_common(entries_kept)[identifier]
 
-        digit = int(entry[i])
+    for i in range(len(data[0])):
+        matcher = get_most_and_least_common(entries_kept)[identifier]
         
-        if digit != most_common[i]:
-            entries_kept.remove(entry)
+        for entry in entries_kept[:]:
+            if len(entries_kept) == 1:
+                break
 
-oxygen_rating = int(entries_kept[0], 2)
+            digit = int(entry[i])
+            
+            if digit != matcher[i]:
+                entries_kept.remove(entry)
 
-entries_kept = data.copy()
-most_common, least_common = get_most_and_least_common(entries_kept)
+    return entries_kept[0]
 
-for i in range(len(data[0])):
-    most_common, least_common = get_most_and_least_common(entries_kept)
-    
-    for entry in entries_kept[:]:
-        if len(entries_kept) == 1:
-            break
-
-        digit = int(entry[i])
-        
-        if digit != least_common[i]:
-            entries_kept.remove(entry)
-
-carbon_rating = int(entries_kept[0], 2)
+oxygen_rating = int(remove_unmatching(data, "most_common"), 2)
+carbon_rating = int(remove_unmatching(data, "least_common"), 2)
 life_support_rating = oxygen_rating * carbon_rating
 
 print("Carbon rating:", carbon_rating, bin(carbon_rating))
