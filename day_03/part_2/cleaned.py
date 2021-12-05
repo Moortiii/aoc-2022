@@ -6,6 +6,7 @@ with open(FILENAME, "r") as f:
     data = f.readlines()
     data = [line.strip() for line in data]
 
+
 def get_most_and_least_common(entries):
     positions = defaultdict(int)
 
@@ -44,17 +45,18 @@ def remove_unmatching(entries, identifier):
 
     for i in range(len(data[0])):
         matcher = get_most_and_least_common(entries_kept)[identifier]
-        
+
         for entry in entries_kept[:]:
             if len(entries_kept) == 1:
                 break
 
             digit = int(entry[i])
-            
+
             if digit != matcher[i]:
                 entries_kept.remove(entry)
 
     return entries_kept[0]
+
 
 oxygen_rating = int(remove_unmatching(data, "most_common"), 2)
 carbon_rating = int(remove_unmatching(data, "least_common"), 2)
